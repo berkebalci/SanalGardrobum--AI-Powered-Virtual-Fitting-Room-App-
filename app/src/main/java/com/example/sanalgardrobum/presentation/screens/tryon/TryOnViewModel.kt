@@ -4,6 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Checkroom
 import androidx.compose.material.icons.outlined.GridView
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
 import com.example.sanalgardrobum.presentation.screens.common.FilterCategory
 import kotlinx.coroutines.channels.Channel
@@ -51,7 +53,8 @@ sealed interface TryOnNavigationEvent {
     data object NavigateToSimulationResult : TryOnNavigationEvent
 }
 
-class TryOnViewModel : ViewModel() {
+@HiltViewModel
+class TryOnViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(TryOnUiState())
     val uiState: StateFlow<TryOnUiState> = _uiState.asStateFlow()

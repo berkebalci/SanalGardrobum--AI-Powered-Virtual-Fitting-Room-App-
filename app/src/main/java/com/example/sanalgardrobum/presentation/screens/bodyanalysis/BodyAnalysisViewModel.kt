@@ -2,6 +2,8 @@ package com.example.sanalgardrobum.presentation.screens.bodyanalysis
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,8 +28,8 @@ data class BodyAnalysisUiState(
 sealed interface BodyAnalysisNavigationEvent {
     data object NavigateToTryOn : BodyAnalysisNavigationEvent
 }
-
-class BodyAnalysisViewModel : ViewModel() {
+@HiltViewModel
+class BodyAnalysisViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(BodyAnalysisUiState())
     val uiState: StateFlow<BodyAnalysisUiState> = _uiState.asStateFlow()

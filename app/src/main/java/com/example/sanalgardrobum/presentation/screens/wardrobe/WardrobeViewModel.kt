@@ -5,6 +5,8 @@ import androidx.compose.material.icons.outlined.Checkroom
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import com.example.sanalgardrobum.presentation.screens.common.FilterCategory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,7 +48,8 @@ data class WardrobeUiState(
     }
 }
 
-class WardrobeViewModel : ViewModel() {
+@HiltViewModel
+class WardrobeViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(WardrobeUiState())
     val uiState: StateFlow<WardrobeUiState> = _uiState.asStateFlow()

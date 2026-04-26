@@ -1,6 +1,8 @@
 package com.example.sanalgardrobum.presentation.screens.combinations
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import com.example.sanalgardrobum.presentation.screens.common.FilterCategory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,7 +39,8 @@ data class CombinationsUiState(
     }
 }
 
-class CombinationsViewModel : ViewModel() {
+@HiltViewModel
+class CombinationsViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(CombinationsUiState())
     val uiState: StateFlow<CombinationsUiState> = _uiState.asStateFlow()

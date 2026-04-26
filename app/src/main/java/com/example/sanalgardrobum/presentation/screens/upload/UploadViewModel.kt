@@ -1,6 +1,8 @@
 package com.example.sanalgardrobum.presentation.screens.upload
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +24,8 @@ sealed interface UploadNavigationEvent {
     data object NavigateToBodyAnalysis : UploadNavigationEvent
 }
 
-class UploadViewModel : ViewModel() {
+@HiltViewModel
+class UploadViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(UploadUiState())
     val uiState: StateFlow<UploadUiState> = _uiState.asStateFlow()

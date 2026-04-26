@@ -56,7 +56,6 @@ import com.example.sanalgardrobum.ui.theme.*
 @Composable
 fun HomeScreen(
     onNavigateToUpload: () -> Unit,
-    onNavigateToSettings: () -> Unit,
     onNavigateToCombinations: () -> Unit
 ) {
     GradientBackground {

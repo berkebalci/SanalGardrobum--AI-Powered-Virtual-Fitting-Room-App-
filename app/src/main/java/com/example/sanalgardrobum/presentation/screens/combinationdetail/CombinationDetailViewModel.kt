@@ -2,10 +2,12 @@ package com.example.sanalgardrobum.presentation.screens.combinationdetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 data class CombinationDetailData(
     val id: Int,
@@ -34,8 +36,8 @@ data class CombinationDetailUiState(
         )
     }
 }
-
-class CombinationDetailViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+@HiltViewModel
+class CombinationDetailViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val comboId: Int = savedStateHandle["comboId"] ?: 0
 
