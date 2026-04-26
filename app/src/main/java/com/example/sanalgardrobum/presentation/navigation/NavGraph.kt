@@ -72,7 +72,6 @@ fun NavGraph(
         composable(NavDestination.Home.route) {
             HomeScreen(
                 onNavigateToUpload = { navController.navigate(NavDestination.Upload.route) },
-                onNavigateToSettings = { navController.navigate(NavDestination.Settings.route) },
                 onNavigateToCombinations = { navController.navigate(NavDestination.Combinations.route) }
             )
         }
