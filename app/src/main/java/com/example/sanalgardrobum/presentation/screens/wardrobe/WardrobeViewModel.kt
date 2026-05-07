@@ -7,7 +7,7 @@ import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import com.example.sanalgardrobum.presentation.screens.common.FilterCategory
+import com.example.sanalgardrobum.presentation.screens.utils.FilterCategory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

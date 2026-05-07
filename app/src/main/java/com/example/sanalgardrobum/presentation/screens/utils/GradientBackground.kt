@@ -1,4 +1,4 @@
-package com.example.sanalgardrobum.presentation.screens.common
+package com.example.sanalgardrobum.presentation.screens.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

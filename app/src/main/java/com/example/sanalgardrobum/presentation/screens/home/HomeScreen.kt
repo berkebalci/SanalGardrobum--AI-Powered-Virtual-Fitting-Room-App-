@@ -26,9 +26,6 @@ import androidx.compose.material.icons.outlined.Checkroom
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -45,8 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.sanalgardrobum.presentation.screens.common.GradientBackground
-import com.example.sanalgardrobum.presentation.screens.common.StyleAiTopBar
+import com.example.sanalgardrobum.presentation.screens.utils.GradientBackground
 import com.example.sanalgardrobum.ui.theme.*
 
 /**

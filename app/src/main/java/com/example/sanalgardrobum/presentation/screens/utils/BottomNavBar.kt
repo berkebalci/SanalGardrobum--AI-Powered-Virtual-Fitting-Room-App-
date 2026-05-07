@@ -1,4 +1,4 @@
-package com.example.sanalgardrobum.presentation.screens.common
+package com.example.sanalgardrobum.presentation.screens.utils
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Checkroom

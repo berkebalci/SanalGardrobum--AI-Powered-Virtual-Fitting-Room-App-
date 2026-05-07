@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.sanalgardrobum.presentation.screens.common.GradientBackground
-import com.example.sanalgardrobum.presentation.screens.common.StyleAiTopBar
+import com.example.sanalgardrobum.presentation.screens.utils.GradientBackground
+import com.example.sanalgardrobum.presentation.screens.utils.StyleAiTopBar
 import com.example.sanalgardrobum.ui.theme.*
 
 @Composable

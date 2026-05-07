@@ -15,7 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.sanalgardrobum.presentation.navigation.NavDestination
 import com.example.sanalgardrobum.presentation.navigation.NavGraph
-import com.example.sanalgardrobum.presentation.screens.common.BottomNavBar
+import com.example.sanalgardrobum.presentation.screens.utils.BottomNavBar
 import com.example.sanalgardrobum.ui.theme.SanalGardrobumTheme
 
 @AndroidEntryPoint
