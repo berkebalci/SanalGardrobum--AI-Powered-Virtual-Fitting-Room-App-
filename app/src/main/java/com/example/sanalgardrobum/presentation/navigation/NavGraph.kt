@@ -9,7 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -77,7 +77,7 @@ fun NavGraph(
         }
 
         composable(NavDestination.Wardrobe.route) {
-            val viewModel: WardrobeViewModel = viewModel()
+            val viewModel: WardrobeViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
 
             WardrobeScreen(
@@ -92,7 +92,7 @@ fun NavGraph(
         }
 
         composable(NavDestination.Combinations.route) {
-            val viewModel: CombinationsViewModel = viewModel()
+            val viewModel: CombinationsViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
 
             CombinationsScreen(
@@ -105,7 +105,7 @@ fun NavGraph(
         }
 
         composable(NavDestination.Settings.route) {
-            val viewModel: SettingsViewModel = viewModel()
+            val viewModel: SettingsViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
 
             SettingsScreen(
@@ -122,7 +122,7 @@ fun NavGraph(
         // ══════════════════════════════════════════════════════════════
 
         composable(NavDestination.Upload.route) {
-            val viewModel: UploadViewModel = viewModel()
+            val viewModel: UploadViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
 
             // ViewModel'den gelen navigation event'lerini dinle
@@ -150,7 +150,7 @@ fun NavGraph(
         }
 
         composable(NavDestination.BodyAnalysis.route) {
-            val viewModel: BodyAnalysisViewModel = viewModel()
+            val viewModel: BodyAnalysisViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
 
             LaunchedEffect(Unit) {
@@ -171,13 +171,13 @@ fun NavGraph(
         }
 
         composable(NavDestination.TryOn.route) {
-            val viewModel: TryOnViewModel = viewModel()
+            val viewModel: TryOnViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
 
             LaunchedEffect(Unit) {
                 viewModel.navigationEvent.collect { event ->
                     when (event) {
-                        TryOnNavigationEvent.NavigateToSimulationResult ->
+                        is TryOnNavigationEvent.NavigateToSimulationResult ->
                             navController.navigate(NavDestination.SimulationResult.route)
                     }
                 }
@@ -187,7 +187,9 @@ fun NavGraph(
                 uiState = uiState,
                 onCategorySelected = viewModel::onCategorySelected,
                 onClothToggled = viewModel::onClothToggled,
-                onSimulateClicked = viewModel::onSimulateClicked,
+                // Gerçek fotoğraf yolları UploadScreen'den gelecek.
+                // Şimdilik boş string ile bağlandı; UploadScreen entegrasyonunda güncellenir.
+                onSimulateClicked = { viewModel.onSimulateClicked("", "") },
                 onNavigateToWardrobe = { navController.navigate(NavDestination.Wardrobe.route) },
                 onBackClick = { navController.popBackStack() }
             )
@@ -209,7 +211,7 @@ fun NavGraph(
             route = NavDestination.CombinationDetail.route,
             arguments = listOf(navArgument("comboId") { type = NavType.IntType })
         ) {
-            val viewModel: CombinationDetailViewModel = viewModel()
+            val viewModel: CombinationDetailViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
 
             CombinationDetailScreen(

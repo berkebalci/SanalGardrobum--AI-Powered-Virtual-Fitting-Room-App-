@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
+import com.example.sanalgardrobum.data.repository.TryOnRepository
+import com.example.sanalgardrobum.data.util.Resource
 import com.example.sanalgardrobum.presentation.screens.utils.FilterCategory
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +23,8 @@ data class ClothItem(
     val name: String,
     val category: String,
     val color: String,
-    val season: String
+    val season: String,
+    val imagePath: String? = null // Gerçek kıyafet fotoğrafının yerel yolu
 )
 
 data class TryOnUiState(
@@ -29,7 +32,10 @@ data class TryOnUiState(
     val wardrobeItems: List<ClothItem> = emptyList(),
     val selectedClothIds: Set<String> = emptySet(),
     val isSimulating: Boolean = false,
-    val categories: List<FilterCategory> = defaultCategories
+    val categories: List<FilterCategory> = defaultCategories,
+    // API sonucu
+    val resultImagePath: String? = null,
+    val errorMessage: String? = null
 ) {
     val filteredItems: List<ClothItem>
         get() = if (selectedCategory == "all") wardrobeItems
@@ -50,11 +56,13 @@ data class TryOnUiState(
 }
 
 sealed interface TryOnNavigationEvent {
-    data object NavigateToSimulationResult : TryOnNavigationEvent
+    data class NavigateToSimulationResult(val resultImagePath: String) : TryOnNavigationEvent
 }
 
 @HiltViewModel
-class TryOnViewModel @Inject constructor() : ViewModel() {
+class TryOnViewModel @Inject constructor(
+    private val tryOnRepository: TryOnRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TryOnUiState())
     val uiState: StateFlow<TryOnUiState> = _uiState.asStateFlow()
@@ -67,7 +75,7 @@ class TryOnViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun loadWardrobeItems() {
-        // TODO: Repository'den gerçek verileri çek
+        // TODO: Repository'den gerçek verileri çek (Wardrobe DB / API)
         val mockItems = listOf(
             ClothItem("1", "Beyaz Gömlek", "top", "Beyaz", "Tüm Mevsim"),
             ClothItem("2", "Siyah Pantolon", "bottom", "Siyah", "Tüm Mevsim"),
@@ -92,11 +100,38 @@ class TryOnViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun onSimulateClicked() {
+    /**
+     * Seçili kıyafet ve kişi fotoğrafını FastAPI'ye gönderir.
+     *
+     * @param personImagePath Kişi fotoğrafının cihazındaki yerel dosya yolu
+     * @param garmentImagePath Kıyafet fotoğrafının cihazındaki yerel dosya yolu
+     */
+    fun onSimulateClicked(
+        personImagePath: String,
+        garmentImagePath: String
+    ) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isSimulating = true) }
-            // TODO: API call → FastAPI /generate-tryon
-            _navigationEvent.send(TryOnNavigationEvent.NavigateToSimulationResult)
+            tryOnRepository.generateTryOn(personImagePath, garmentImagePath)
+                .collect { result ->
+                    when (result) {
+                        is Resource.Loading -> {
+                            _uiState.update {
+                                it.copy(isSimulating = true, errorMessage = null)
+                            }
+                        }
+                        is Resource.Success -> {
+                            _uiState.update { it.copy(isSimulating = false) }
+                            _navigationEvent.send(
+                                TryOnNavigationEvent.NavigateToSimulationResult(result.data)
+                            )
+                        }
+                        is Resource.Error -> {
+                            _uiState.update {
+                                it.copy(isSimulating = false, errorMessage = result.message)
+                            }
+                        }
+                    }
+                }
         }
     }
 }
