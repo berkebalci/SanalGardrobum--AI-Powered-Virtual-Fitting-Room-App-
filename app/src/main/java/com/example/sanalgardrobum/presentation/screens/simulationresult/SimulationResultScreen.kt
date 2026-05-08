@@ -22,12 +22,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import com.example.sanalgardrobum.presentation.screens.utils.GradientBackground
 import com.example.sanalgardrobum.presentation.screens.utils.StyleAiTopBar
 import com.example.sanalgardrobum.ui.theme.*
 
 @Composable
 fun SimulationResultScreen(
+    imagePath: String?,
     onNavigateToCombinations: () -> Unit,
     onNavigateToTryOn: () -> Unit,
     onBackClick: () -> Unit
@@ -45,7 +48,25 @@ fun SimulationResultScreen(
                 item {
                     Card(modifier = Modifier.fillMaxWidth().height(320.dp), shape = CardShape, elevation = CardDefaults.cardElevation(8.dp)) {
                         Box(modifier = Modifier.fillMaxSize()) {
-                            Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Purple50, Pink50, Blue50))), contentAlignment = Alignment.Center) { Icon(Icons.Outlined.Checkroom, null, tint = Purple400, modifier = Modifier.size(60.dp)) }
+                            Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Purple50, Pink50, Blue50))), contentAlignment = Alignment.Center) {
+                                if (imagePath != null) {
+                                    val bitmap = remember(imagePath) {
+                                        android.graphics.BitmapFactory.decodeFile(imagePath)?.asImageBitmap()
+                                    }
+                                    if (bitmap != null) {
+                                        androidx.compose.foundation.Image(
+                                            bitmap = bitmap,
+                                            contentDescription = "Simülasyon Sonucu",
+                                            modifier = Modifier.fillMaxSize(),
+                                            contentScale = ContentScale.Crop
+                                        )
+                                    } else {
+                                        Icon(Icons.Outlined.Checkroom, null, tint = Purple400, modifier = Modifier.size(60.dp))
+                                    }
+                                } else {
+                                    Icon(Icons.Outlined.Checkroom, null, tint = Purple400, modifier = Modifier.size(60.dp))
+                                }
+                            }
                             Row(modifier = Modifier.fillMaxWidth().padding(16.dp).align(Alignment.TopCenter), horizontalArrangement = Arrangement.SpaceBetween) {
                                 Row(modifier = Modifier.clip(RoundedCornerShape(50)).background(Green500).padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) { Icon(Icons.Filled.CheckCircle, null, tint = Color.White, modifier = Modifier.size(14.dp)); Spacer(Modifier.width(6.dp)); Text("Simülasyon Tamamlandı", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Color.White) }
                                 Box(modifier = Modifier.size(36.dp).clip(CircleShape).background(Color.White.copy(0.9f)).clickable { }, contentAlignment = Alignment.Center) { Icon(Icons.Outlined.Download, "İndir", tint = Gray700, modifier = Modifier.size(18.dp)) }

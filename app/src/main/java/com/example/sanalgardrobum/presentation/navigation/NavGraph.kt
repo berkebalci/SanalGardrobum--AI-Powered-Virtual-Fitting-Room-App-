@@ -129,18 +129,25 @@ fun NavGraph(
             LaunchedEffect(Unit) {
                 viewModel.navigationEvent.collect { event ->
                     when (event) {
-                        UploadNavigationEvent.NavigateToBodyAnalysis ->
-                            navController.navigate(NavDestination.BodyAnalysis.route) {
+                        is UploadNavigationEvent.NavigateToBodyAnalysis -> {
+                            val route = NavDestination.BodyAnalysis.createRoute(
+                                personImageUri = event.userPhotoUri,
+                                garmentImageUri = event.clothingPhotoUri
+                            )
+                            navController.navigate(route) {
                                 popUpTo(NavDestination.Upload.route) { inclusive = true }
                             }
+                        }
                     }
                 }
             }
 
             UploadScreen(
                 uiState = uiState,
-                onPhotoSelected = viewModel::onPhotoSelected,
-                onPhotoDeleted = viewModel::onPhotoDeleted,
+                onUserPhotoSelected = viewModel::onUserPhotoSelected,
+                onUserPhotoDeleted = viewModel::onUserPhotoDeleted,
+                onClothingPhotoSelected = viewModel::onClothingPhotoSelected,
+                onClothingPhotoDeleted = viewModel::onClothingPhotoDeleted,
                 onHeightChanged = viewModel::onHeightChanged,
                 onWeightChanged = viewModel::onWeightChanged,
                 onSizeSelected = viewModel::onSizeSelected,
@@ -149,15 +156,21 @@ fun NavGraph(
             )
         }
 
-        composable(NavDestination.BodyAnalysis.route) {
+        composable(
+            route = NavDestination.BodyAnalysis.route,
+            arguments = listOf(
+                navArgument("personImageUri") { type = NavType.StringType },
+                navArgument("garmentImageUri") { type = NavType.StringType }
+            )
+        ) {
             val viewModel: BodyAnalysisViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
 
             LaunchedEffect(Unit) {
                 viewModel.navigationEvent.collect { event ->
                     when (event) {
-                        BodyAnalysisNavigationEvent.NavigateToTryOn ->
-                            navController.navigate(NavDestination.TryOn.route) {
+                        is BodyAnalysisNavigationEvent.NavigateToSimulationResult ->
+                            navController.navigate(NavDestination.SimulationResult.createRoute(event.imagePath)) {
                                 popUpTo(NavDestination.BodyAnalysis.route) { inclusive = true }
                             }
                     }
@@ -166,7 +179,8 @@ fun NavGraph(
 
             BodyAnalysisScreen(
                 uiState = uiState,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onRetryClick = viewModel::onRetryClicked
             )
         }
 
@@ -178,7 +192,7 @@ fun NavGraph(
                 viewModel.navigationEvent.collect { event ->
                     when (event) {
                         is TryOnNavigationEvent.NavigateToSimulationResult ->
-                            navController.navigate(NavDestination.SimulationResult.route)
+                            navController.navigate(NavDestination.SimulationResult.createRoute(event.resultImagePath))
                     }
                 }
             }
@@ -195,8 +209,13 @@ fun NavGraph(
             )
         }
 
-        composable(NavDestination.SimulationResult.route) {
+        composable(
+            route = NavDestination.SimulationResult.route,
+            arguments = listOf(navArgument("imagePath") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val imagePath = backStackEntry.arguments?.getString("imagePath")
             SimulationResultScreen(
+                imagePath = imagePath,
                 onNavigateToCombinations = { navController.navigate(NavDestination.Combinations.route) },
                 onNavigateToTryOn = { navController.navigate(NavDestination.TryOn.route) },
                 onBackClick = { navController.popBackStack() }

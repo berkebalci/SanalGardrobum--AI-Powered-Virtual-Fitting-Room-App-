@@ -1,11 +1,13 @@
 package com.example.sanalgardrobum.data.remote.di
 
+import android.content.Context
 import com.example.sanalgardrobum.data.remote.api.TryOnApiService
 import com.example.sanalgardrobum.data.repository.TryOnRepository
 import com.example.sanalgardrobum.data.repository.TryOnRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -58,8 +60,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideTryOnRepository(
-        apiService: TryOnApiService
+        apiService: TryOnApiService,
+        @ApplicationContext context: Context
     ): TryOnRepository {
-        return TryOnRepositoryImpl(apiService)
+        return TryOnRepositoryImpl(apiService, context)
     }
 }
+

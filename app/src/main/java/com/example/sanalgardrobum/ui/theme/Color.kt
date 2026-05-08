@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 // Background gradient başlangıcı, containerColor, subtle highlight
 val Purple50 = Color(0xFFFAF5FF)
 val Purple100 = Color(0xFFF3E8FF)
+val Purple300 = Color(0xFFD8B4FE)   // Upload card border, subtle accent
 val Purple400 = Color(0xFFC084FC)   // Feature card gradient start
 val Purple500 = Color(0xFFA855F7)   // Accent gradient start, scanning effect
 val Purple600 = Color(0xFF9333EA)   // Primary CTA gradient start, active tab
@@ -18,6 +19,7 @@ val Purple700 = Color(0xFF7E22CE)   // Wardrobe season badge text
 
 // ── Pink Palette ────────────────────────────────────────────────────────────
 val Pink50 = Color(0xFFFDF2F8)      // Background gradient middle
+val Pink300 = Color(0xFFF9A8D4)     // Upload card border, subtle accent
 val Pink400 = Color(0xFFF472B6)     // Feature card gradient end
 val Pink500 = Color(0xFFEC4899)     // Accent gradient end, heart fill
 val Pink600 = Color(0xFFDB2777)     // Primary CTA gradient end

@@ -18,9 +18,9 @@ import retrofit2.http.Part
 interface TryOnApiService {
 
     @Multipart
-    @POST("generate-tryon")
-    suspend fun generateTryOn(
-        @Part personImage: MultipartBody.Part,
-        @Part garmentImage: MultipartBody.Part
+    @POST("try-on/")
+    suspend fun tryOn(
+        @Part human_img: MultipartBody.Part,
+        @Part garm_img: MultipartBody.Part
     ): Response<ResponseBody>
 }

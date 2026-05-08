@@ -1,5 +1,6 @@
 package com.example.sanalgardrobum.presentation.screens.upload
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -12,16 +13,29 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+private const val TAG = "UploadViewModel"
+
 data class UploadUiState(
-    val uploadedImageUri: String? = null,
+    val userPhotoUri: String? = null,
+    val clothingPhotoUri: String? = null,
     val height: String = "",
     val weight: String = "",
     val selectedSize: String = "M",
     val isAnalyzing: Boolean = false
-)
+) {
+    /** Her iki fotoğraf da yüklendiyse buton aktif olur */
+    val canAnalyze: Boolean get() = userPhotoUri != null && clothingPhotoUri != null
+}
 
 sealed interface UploadNavigationEvent {
-    data object NavigateToBodyAnalysis : UploadNavigationEvent
+    /**
+     * BodyAnalysis ekranına geçerken seçilen fotoğraf URI'lerini taşır.
+     * BodyAnalysisViewModel bu URI'leri kullanarak API çağrısı yapacak.
+     */
+    data class NavigateToBodyAnalysis(
+        val userPhotoUri: String,
+        val clothingPhotoUri: String
+    ) : UploadNavigationEvent
 }
 
 @HiltViewModel
@@ -33,14 +47,31 @@ class UploadViewModel @Inject constructor() : ViewModel() {
     private val _navigationEvent = Channel<UploadNavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
-    fun onPhotoSelected() {
-        // TODO: Galeri/kamera intent → Firebase Storage upload → URL al
-        _uiState.update { it.copy(uploadedImageUri = "mock_uploaded") }
+    // ─── Kullanıcı fotoğrafı ───────────────────────────────────────────────
+
+    fun onUserPhotoSelected(uri: String) {
+        Log.d(TAG, "Kullanıcı fotoğrafı seçildi: $uri")
+        _uiState.update { it.copy(userPhotoUri = uri) }
     }
 
-    fun onPhotoDeleted() {
-        _uiState.update { it.copy(uploadedImageUri = null) }
+    fun onUserPhotoDeleted() {
+        Log.d(TAG, "Kullanıcı fotoğrafı silindi")
+        _uiState.update { it.copy(userPhotoUri = null) }
     }
+
+    // ─── Kıyafet fotoğrafı ────────────────────────────────────────────────
+
+    fun onClothingPhotoSelected(uri: String) {
+        Log.d(TAG, "Kıyafet fotoğrafı seçildi: $uri")
+        _uiState.update { it.copy(clothingPhotoUri = uri) }
+    }
+
+    fun onClothingPhotoDeleted() {
+        Log.d(TAG, "Kıyafet fotoğrafı silindi")
+        _uiState.update { it.copy(clothingPhotoUri = null) }
+    }
+
+    // ─── Ölçüler ──────────────────────────────────────────────────────────
 
     fun onHeightChanged(value: String) {
         _uiState.update { it.copy(height = value) }
@@ -54,11 +85,25 @@ class UploadViewModel @Inject constructor() : ViewModel() {
         _uiState.update { it.copy(selectedSize = size) }
     }
 
+    // ─── Analiz ───────────────────────────────────────────────────────────
+
     fun onAnalyzeClicked() {
+        val state = _uiState.value
+        if (!state.canAnalyze) return
+
         viewModelScope.launch {
-            _uiState.update { it.copy(isAnalyzing = true) }
-            // TODO: Firebase'e yükleme + API call burada yapılacak
-            _navigationEvent.send(UploadNavigationEvent.NavigateToBodyAnalysis)
+            Log.d(TAG, "=== ANALİZ BAŞLATILIYOR ===")
+            Log.d(TAG, "Kullanıcı Fotoğrafı URI: ${state.userPhotoUri}")
+            Log.d(TAG, "Kıyafet Fotoğrafı URI: ${state.clothingPhotoUri}")
+            Log.d(TAG, "Ölçüler → Boy: ${state.height}, Kilo: ${state.weight}, Beden: ${state.selectedSize}")
+
+            // BodyAnalysis ekranına fotoğraf URI'lerini taşıyarak geç
+            _navigationEvent.send(
+                UploadNavigationEvent.NavigateToBodyAnalysis(
+                    userPhotoUri = state.userPhotoUri!!,
+                    clothingPhotoUri = state.clothingPhotoUri!!
+                )
+            )
         }
     }
 }

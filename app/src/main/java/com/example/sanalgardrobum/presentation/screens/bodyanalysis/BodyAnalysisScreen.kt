@@ -33,7 +33,8 @@ import com.example.sanalgardrobum.ui.theme.*
 @Composable
 fun BodyAnalysisScreen(
     uiState: BodyAnalysisUiState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onRetryClick: () -> Unit = {}
 ) {
     val animatedProgress by animateFloatAsState(targetValue = uiState.progress, animationSpec = tween(300), label = "progress")
 
@@ -49,35 +50,73 @@ fun BodyAnalysisScreen(
                     }
                     Spacer(Modifier.height(24.dp))
                 }
-                item {
-                    Card(modifier = Modifier.fillMaxWidth(), shape = CardShape, colors = CardDefaults.cardColors(containerColor = Color.White), elevation = CardDefaults.cardElevation(1.dp)) {
-                        Column(modifier = Modifier.padding(20.dp)) {
-                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                                Text("Analiz İlerlemesi", fontWeight = FontWeight.Bold, color = Gray800)
-                                Text("${(animatedProgress * 100).toInt()}%", fontSize = 24.sp, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.displayMedium.copy(brush = AppGradients.AccentHorizontal))
-                            }
-                            Spacer(Modifier.height(12.dp))
-                            LinearProgressIndicator(progress = { animatedProgress }, modifier = Modifier.fillMaxWidth().height(12.dp).clip(RoundedCornerShape(50)), color = Purple500, trackColor = Gray100, strokeCap = StrokeCap.Round)
-                            Spacer(Modifier.height(16.dp))
-                            uiState.steps.forEachIndexed { index, label ->
-                                val isCompleted = index < uiState.currentStep
-                                val isUpcoming = index > uiState.currentStep
-                                Row(Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(brush = if (isCompleted) Brush.horizontalGradient(listOf(Green500, Green500)) else if (index == uiState.currentStep) AppGradients.AccentSoft else Brush.horizontalGradient(listOf(Gray200, Gray200))), contentAlignment = Alignment.Center) {
-                                        if (isCompleted) Icon(Icons.Filled.Check, null, tint = Color.White, modifier = Modifier.size(18.dp))
-                                    }
-                                    Spacer(Modifier.width(12.dp))
-                                    Text(label, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = if (isUpcoming) Gray400 else Gray800)
+
+                // ── Hata durumu ─────────────────────────────────────────
+                if (uiState.errorMessage != null) {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(containerColor = Red50)
+                        ) {
+                            Column(modifier = Modifier.padding(20.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(Icons.Outlined.ErrorOutline, null, tint = Red500, modifier = Modifier.size(24.dp))
+                                    Spacer(Modifier.width(8.dp))
+                                    Text("Bağlantı Hatası", fontWeight = FontWeight.Bold, color = Red600, fontSize = 16.sp)
+                                }
+                                Spacer(Modifier.height(8.dp))
+                                Text(uiState.errorMessage, fontSize = 13.sp, color = Gray600, lineHeight = 18.sp)
+                                Spacer(Modifier.height(16.dp))
+                                Button(
+                                    onClick = onRetryClick,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(12.dp),
+                                    colors = ButtonDefaults.buttonColors(containerColor = Purple500)
+                                ) {
+                                    Icon(Icons.Outlined.Refresh, null, modifier = Modifier.size(18.dp))
+                                    Spacer(Modifier.width(8.dp))
+                                    Text("Tekrar Dene")
                                 }
                             }
                         }
+                        Spacer(Modifier.height(24.dp))
                     }
-                    Spacer(Modifier.height(24.dp))
                 }
-                item {
-                    AnimatedVisibility(visible = uiState.progress > 0.5f, enter = fadeIn() + slideInVertically(initialOffsetY = { it / 4 })) { AnalysisResultsCard() }
-                    Spacer(Modifier.height(24.dp))
+
+                // ── Progress kartı ──────────────────────────────────────
+                if (uiState.errorMessage == null) {
+                    item {
+                        Card(modifier = Modifier.fillMaxWidth(), shape = CardShape, colors = CardDefaults.cardColors(containerColor = Color.White), elevation = CardDefaults.cardElevation(1.dp)) {
+                            Column(modifier = Modifier.padding(20.dp)) {
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                                    Text("Analiz İlerlemesi", fontWeight = FontWeight.Bold, color = Gray800)
+                                    Text("${(animatedProgress * 100).toInt()}%", fontSize = 24.sp, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.displayMedium.copy(brush = AppGradients.AccentHorizontal))
+                                }
+                                Spacer(Modifier.height(12.dp))
+                                LinearProgressIndicator(progress = { animatedProgress }, modifier = Modifier.fillMaxWidth().height(12.dp).clip(RoundedCornerShape(50)), color = Purple500, trackColor = Gray100, strokeCap = StrokeCap.Round)
+                                Spacer(Modifier.height(16.dp))
+                                uiState.steps.forEachIndexed { index, label ->
+                                    val isCompleted = index < uiState.currentStep
+                                    val isUpcoming = index > uiState.currentStep
+                                    Row(Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                                        Box(modifier = Modifier.size(32.dp).clip(CircleShape).background(brush = if (isCompleted) Brush.horizontalGradient(listOf(Green500, Green500)) else if (index == uiState.currentStep) AppGradients.AccentSoft else Brush.horizontalGradient(listOf(Gray200, Gray200))), contentAlignment = Alignment.Center) {
+                                            if (isCompleted) Icon(Icons.Filled.Check, null, tint = Color.White, modifier = Modifier.size(18.dp))
+                                        }
+                                        Spacer(Modifier.width(12.dp))
+                                        Text(label, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = if (isUpcoming) Gray400 else Gray800)
+                                    }
+                                }
+                            }
+                        }
+                        Spacer(Modifier.height(24.dp))
+                    }
+                    item {
+                        AnimatedVisibility(visible = uiState.progress > 0.5f, enter = fadeIn() + slideInVertically(initialOffsetY = { it / 4 })) { AnalysisResultsCard() }
+                        Spacer(Modifier.height(24.dp))
+                    }
                 }
+
                 item { AiInfoBanner() }
             }
             StyleAiTopBar(title = "Vücut Analizi", onBackClick = onBackClick)
