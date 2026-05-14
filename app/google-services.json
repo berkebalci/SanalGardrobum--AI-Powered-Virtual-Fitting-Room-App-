@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "85796641499",
+    "project_id": "sanalgardrobum",
+    "storage_bucket": "sanalgardrobum.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85796641499:android:d7951f243e99e8c1534afe",
+        "android_client_info": {
+          "package_name": "com.example.sanalgardrobum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "85796641499-82fllq0lme7aus60mkbbnooj01b3t390.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGfY-N2PGLsrCy9pOvRbL967oS1xPXXXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "85796641499-82fllq0lme7aus60mkbbnooj01b3t390.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

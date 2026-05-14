@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)     // 2. Compose Compiler (Kotlin 2.0+ için)
     alias(libs.plugins.ksp)                // 3. KSP
     alias(libs.plugins.hilt.android)       // 4. EN SONDA (Android ve KSP'den sonra)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -71,4 +72,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-analytics")
 }
