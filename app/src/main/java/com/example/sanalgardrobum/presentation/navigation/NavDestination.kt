@@ -32,4 +32,5 @@ sealed class NavDestination(val route: String) {
         fun createRoute(comboId: Int): String = "combination_detail/$comboId"
     }
     data object Settings : NavDestination("settings")
+    data object Login : NavDestination("login")
 }

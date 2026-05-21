@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -23,6 +24,10 @@ import com.example.sanalgardrobum.presentation.screens.combinationdetail.Combina
 import com.example.sanalgardrobum.presentation.screens.combinations.CombinationsScreen
 import com.example.sanalgardrobum.presentation.screens.combinations.CombinationsViewModel
 import com.example.sanalgardrobum.presentation.screens.home.HomeScreen
+import com.example.sanalgardrobum.presentation.screens.login.LoginNavigationEvent
+import com.example.sanalgardrobum.presentation.screens.login.LoginScreen
+import com.example.sanalgardrobum.presentation.screens.login.LoginViewModel
+import com.example.sanalgardrobum.presentation.screens.settings.SettingsNavigationEvent
 import com.example.sanalgardrobum.presentation.screens.settings.SettingsScreen
 import com.example.sanalgardrobum.presentation.screens.settings.SettingsViewModel
 import com.example.sanalgardrobum.presentation.screens.simulationresult.SimulationResultScreen
@@ -48,11 +53,12 @@ import com.example.sanalgardrobum.presentation.screens.wardrobe.WardrobeViewMode
 @Composable
 fun NavGraph(
     navController: NavHostController,
+    startDestination: String,
     modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavDestination.Home.route,
+        startDestination = startDestination,
         modifier = modifier,
         enterTransition = {
             fadeIn(tween(300)) + slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(300))
@@ -65,6 +71,33 @@ fun NavGraph(
             fadeOut(tween(300)) + slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(300))
         }
     ) {
+        // ══════════════════════════════════════════════════════════════
+        // AUTH SCREEN
+        // ══════════════════════════════════════════════════════════════
+
+        composable(NavDestination.Login.route) {
+            val viewModel: LoginViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsState()
+            val context = LocalContext.current
+
+            LaunchedEffect(Unit) {
+                viewModel.navigationEvent.collect { event ->
+                    when (event) {
+                        is LoginNavigationEvent.NavigateToHome -> {
+                            navController.navigate(NavDestination.Home.route) {
+                                popUpTo(NavDestination.Login.route) { inclusive = true }
+                            }
+                        }
+                    }
+                }
+            }
+
+            LoginScreen(
+                uiState = uiState,
+                onGoogleSignInClicked = { viewModel.onGoogleSignInClicked(context) }
+            )
+        }
+
         // ══════════════════════════════════════════════════════════════
         // TAB SCREENS (BottomNavBar görünür)
         // ══════════════════════════════════════════════════════════════
@@ -87,7 +120,14 @@ fun NavGraph(
                 onItemDismissed = viewModel::onItemDismissed,
                 onNavigateToUpload = { navController.navigate(NavDestination.Upload.route) },
                 onNavigateToCombinations = { navController.navigate(NavDestination.Combinations.route) },
-                onNavigateToTryOn = { navController.navigate(NavDestination.TryOn.route) }
+                onNavigateToTryOn = { navController.navigate(NavDestination.TryOn.route) },
+                onAddClicked = viewModel::onAddClicked,
+                onPhotoSelected = viewModel::onPhotoSelected,
+                onGarmentNameChanged = viewModel::onGarmentNameChanged,
+                onGarmentCategoryChanged = viewModel::onGarmentCategoryChanged,
+                onConfirmAdd = viewModel::onConfirmAdd,
+                onAddDialogDismissed = viewModel::onAddDialogDismissed,
+                onDeleteItem = viewModel::onDeleteItem
             )
         }
 
@@ -107,6 +147,18 @@ fun NavGraph(
         composable(NavDestination.Settings.route) {
             val viewModel: SettingsViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
+
+            LaunchedEffect(Unit) {
+                viewModel.navigationEvent.collect { event ->
+                    when (event) {
+                        is SettingsNavigationEvent.NavigateToLogin -> {
+                            navController.navigate(NavDestination.Login.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                    }
+                }
+            }
 
             SettingsScreen(
                 uiState = uiState,

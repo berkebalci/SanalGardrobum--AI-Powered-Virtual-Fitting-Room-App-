@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -17,15 +16,28 @@ import com.example.sanalgardrobum.presentation.navigation.NavDestination
 import com.example.sanalgardrobum.presentation.navigation.NavGraph
 import com.example.sanalgardrobum.presentation.screens.utils.BottomNavBar
 import com.example.sanalgardrobum.ui.theme.SanalGardrobumTheme
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SanalGardrobumTheme {
-                MainScreen()
+                // Session kontrolü: mevcut kullanıcı varsa Home, yoksa Login
+                val startDestination = if (firebaseAuth.currentUser != null) {
+                    NavDestination.Home.route
+                } else {
+                    NavDestination.Login.route
+                }
+                MainScreen(startDestination = startDestination)
             }
         }
     }
@@ -40,7 +52,7 @@ private val bottomBarRoutes = setOf(
 )
 
 @Composable
-private fun MainScreen() {
+private fun MainScreen(startDestination: String) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -56,6 +68,7 @@ private fun MainScreen() {
     ) { innerPadding ->
         NavGraph(
             navController = navController,
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         )
     }

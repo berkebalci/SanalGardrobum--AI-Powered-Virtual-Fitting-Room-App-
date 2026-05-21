@@ -57,7 +57,7 @@ object NetworkModule {
         return retrofit.create(TryOnApiService::class.java)
     }
 
-    @Provides
+    @Provides //Binds yapabiliriz cunku implementayon kodunu biz yazdik
     @Singleton
     fun provideTryOnRepository(
         apiService: TryOnApiService,
