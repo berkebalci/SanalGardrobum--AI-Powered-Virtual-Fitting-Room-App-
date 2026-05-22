@@ -151,6 +151,7 @@ class WardrobeViewModel @Inject constructor(
             try {
                 addGarmentUseCase(userId, uri, name, category)
                 onAddDialogDismissed()
+                _uiState.update { it.copy(isAdding = false) }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(

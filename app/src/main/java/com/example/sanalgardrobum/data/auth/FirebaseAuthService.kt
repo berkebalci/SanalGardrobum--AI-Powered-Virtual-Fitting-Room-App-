@@ -31,7 +31,7 @@ class FirebaseAuthService @Inject constructor(
 
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(context.getString(R.string.default_web_client_id))
+            .setServerClientId(context.getString(R.string.web_client_id))
             .build()
 
         val request = GetCredentialRequest.Builder()
@@ -66,6 +66,7 @@ class FirebaseAuthService @Inject constructor(
 
     fun signOut() {
         auth.signOut()
+
     }
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SanalGardrobum</string>
+    <!-- Firebase Console → Authentication → Sign-in method → Google → Web client ID -->
+    <string name="web_client_id">85796641499-0acm1bkveup5h3c9jumcottml79u0867.apps.googleusercontent.com</string>
 </resources>
