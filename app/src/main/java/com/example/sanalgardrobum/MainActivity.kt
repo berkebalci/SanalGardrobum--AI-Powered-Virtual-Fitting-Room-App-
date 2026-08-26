@@ -1,5 +1,6 @@
 package com.example.sanalgardrobum
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.sanalgardrobum.presentation.navigation.NavDestination
@@ -18,6 +21,7 @@ import com.example.sanalgardrobum.presentation.screens.utils.BottomNavBar
 import com.example.sanalgardrobum.ui.theme.SanalGardrobumTheme
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.jar.Manifest
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,6 +33,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        if(!checkPermission()){
+            ActivityCompat.requestPermissions(
+                this,
+                permission_List,
+                0)
+        }
         setContent {
             SanalGardrobumTheme {
                 // Session kontrolü: mevcut kullanıcı varsa Home, yoksa Login
@@ -41,6 +51,21 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    private fun checkPermission() : Boolean{
+        return permission_List.all {
+            ContextCompat.checkSelfPermission(
+                applicationContext, it
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    companion object {
+        private val permission_List= arrayOf(
+            android.Manifest.permission.CAMERA,
+        )
+    }
+
+
 }
 
 // ── Bottom bar'ın gösterildiği route'lar ─────────────────────────────────────
@@ -72,4 +97,7 @@ private fun MainScreen(startDestination: String) {
             modifier = Modifier.padding(innerPadding)
         )
     }
+
 }
+
+

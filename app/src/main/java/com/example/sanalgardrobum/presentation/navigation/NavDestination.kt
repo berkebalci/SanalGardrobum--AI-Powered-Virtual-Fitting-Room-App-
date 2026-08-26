@@ -33,4 +33,5 @@ sealed class NavDestination(val route: String) {
     }
     data object Settings : NavDestination("settings")
     data object Login : NavDestination("login")
+    data object Camera : NavDestination("camera")
 }

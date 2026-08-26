@@ -1,5 +1,6 @@
 package com.example.sanalgardrobum.presentation.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,7 +21,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CameraAlt
+
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Checkroom
@@ -35,13 +37,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.sanalgardrobum.R
 import com.example.sanalgardrobum.presentation.screens.utils.GradientBackground
 import com.example.sanalgardrobum.ui.theme.*
 
@@ -68,8 +75,9 @@ fun HomeScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = "Yapay Zeka ile\nSanal Gardırop",
-                            style = MaterialTheme.typography.headlineLarge,
-                            color = Gray800,
+                            style = MaterialTheme.typography.headlineLarge.copy(
+                                brush = AppGradients.AccentHorizontal
+                            ),
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(12.dp))
@@ -119,20 +127,101 @@ fun HomeScreen(
 
 @Composable
 private fun HeroBanner(onCtaClick: () -> Unit, modifier: Modifier = Modifier) {
-    Card(modifier = modifier.fillMaxWidth().height(320.dp), shape = CardShape, elevation = CardDefaults.cardElevation(8.dp)) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Purple100, Pink50, Blue50))))
-            Box(modifier = Modifier.fillMaxSize().background(AppGradients.ImageOverlay))
-            Box(
-                modifier = Modifier.align(Alignment.BottomCenter).padding(24.dp).fillMaxWidth().height(52.dp)
-                    .clip(RoundedCornerShape(16.dp)).background(Color.White).clickable { onCtaClick() },
-                contentAlignment = Alignment.Center
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Overlapping fashion cards
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            // Left card — tilted
+            Card(
+                modifier = Modifier
+                    .width(140.dp)
+                    .height(200.dp)
+                    .offset(x = (-80).dp, y = 16.dp)
+                    .rotate(-8f),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(6.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.CameraAlt, null, tint = Gray800, modifier = Modifier.size(20.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Fotoğraf Yükle ve Başla", fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Gray800)
+                Image(
+                    painter = painterResource(id = R.drawable.hero_banner3),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            // Right card — tilted
+            Card(
+                modifier = Modifier
+                    .width(140.dp)
+                    .height(200.dp)
+                    .offset(x = 80.dp, y = 16.dp)
+                    .rotate(8f),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(6.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.hero_banner2),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            // Center card — largest, drawn last so it sits on top
+            Card(
+                modifier = Modifier
+                    .width(170.dp)
+                    .height(250.dp)
+                    .shadow(16.dp, RoundedCornerShape(20.dp)),
+                shape = RoundedCornerShape(20.dp),
+                elevation = CardDefaults.cardElevation(12.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.hero_banner1),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Gradient CTA button
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .shadow(8.dp, RoundedCornerShape(28.dp))
+                .clip(RoundedCornerShape(28.dp))
+                .background(AppGradients.AccentHorizontal)
+                .clickable { onCtaClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(Color.White.copy(alpha = 0.25f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Outlined.CameraAlt, null, tint = Color.White, modifier = Modifier.size(18.dp))
                 }
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    "Fotoğraf Yükle ve Başla",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                    color = Color.White
+                )
             }
         }
     }

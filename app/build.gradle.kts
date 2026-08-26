@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application) // 1. Her zaman en üstte
     alias(libs.plugins.kotlin.compose)     // 2. Compose Compiler (Kotlin 2.0+ için)
@@ -35,6 +37,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 ksp {
@@ -42,6 +45,14 @@ ksp {
     arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
 }
 dependencies {
+    val cameraxVersion = "1.3.0-rc01"
+
+    // 2. "$" işareti ile çift tırnak içinde kullanın:
+    implementation("androidx.camera:camera-core:$cameraxVersion")
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
+    implementation("androidx.camera:camera-extensions:$cameraxVersion")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -72,6 +83,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))

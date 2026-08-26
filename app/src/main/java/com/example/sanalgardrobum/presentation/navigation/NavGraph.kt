@@ -19,6 +19,7 @@ import androidx.navigation.navArgument
 import com.example.sanalgardrobum.presentation.screens.bodyanalysis.BodyAnalysisNavigationEvent
 import com.example.sanalgardrobum.presentation.screens.bodyanalysis.BodyAnalysisScreen
 import com.example.sanalgardrobum.presentation.screens.bodyanalysis.BodyAnalysisViewModel
+import com.example.sanalgardrobum.presentation.screens.camera.Camera
 import com.example.sanalgardrobum.presentation.screens.combinationdetail.CombinationDetailScreen
 import com.example.sanalgardrobum.presentation.screens.combinationdetail.CombinationDetailViewModel
 import com.example.sanalgardrobum.presentation.screens.combinations.CombinationsScreen
@@ -206,6 +207,9 @@ fun NavGraph(
                 onAnalyzeClicked = viewModel::onAnalyzeClicked,
                 onBackClick = { navController.popBackStack() }
             )
+        }
+        composable(NavDestination.Camera.route) {
+            Camera()
         }
 
         composable(
