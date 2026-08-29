@@ -45,7 +45,7 @@ ksp {
     arg("dagger.hilt.disableModulesHaveInstallInCheck", "true")
 }
 dependencies {
-    val cameraxVersion = "1.3.0-rc01"
+    val cameraxVersion = "1.4.1"
 
     // 2. "$" işareti ile çift tırnak içinde kullanın:
     implementation("androidx.camera:camera-core:$cameraxVersion")

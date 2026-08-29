@@ -10,6 +10,4 @@ fun Camera(modifier: Modifier = Modifier) {
     Box{
         PreviewCamera(modifier)
     }
-
-
 }
