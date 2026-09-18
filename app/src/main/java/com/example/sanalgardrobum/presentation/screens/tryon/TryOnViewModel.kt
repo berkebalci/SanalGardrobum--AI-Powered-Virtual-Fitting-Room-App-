@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
-import com.example.sanalgardrobum.data.repository.TryOnRepository
+import com.example.sanalgardrobum.domain.repository.TryOnRepository
 import com.example.sanalgardrobum.data.util.Resource
 import com.example.sanalgardrobum.presentation.screens.utils.FilterCategory
 import kotlinx.coroutines.channels.Channel

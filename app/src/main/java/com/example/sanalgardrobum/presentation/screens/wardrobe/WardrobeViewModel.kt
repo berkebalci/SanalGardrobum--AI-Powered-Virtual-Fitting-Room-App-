@@ -1,6 +1,7 @@
 package com.example.sanalgardrobum.presentation.screens.wardrobe
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Checkroom
 import androidx.compose.material.icons.outlined.GridView
@@ -147,6 +148,7 @@ class WardrobeViewModel @Inject constructor(
         val category = _uiState.value.newGarmentCategory
 
         viewModelScope.launch {
+            Log.e("hi","purna")
             _uiState.update { it.copy(isAdding = true) }
             try {
                 addGarmentUseCase(userId, uri, name, category)

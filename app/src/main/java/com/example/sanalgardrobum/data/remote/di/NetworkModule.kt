@@ -2,7 +2,7 @@ package com.example.sanalgardrobum.data.remote.di
 
 import android.content.Context
 import com.example.sanalgardrobum.data.remote.api.TryOnApiService
-import com.example.sanalgardrobum.data.repository.TryOnRepository
+import com.example.sanalgardrobum.domain.repository.TryOnRepository
 import com.example.sanalgardrobum.data.repository.TryOnRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -24,7 +24,7 @@ object NetworkModule {
      * IDM-VTON modeli uzun sürebilir (Gradio inference).
      * Read/Write/Connect timeout değerleri buna göre uzatıldı.
      */
-    private const val BASE_URL = "http://10.0.2.2:8000/" // Emülatör → localhost
+    private const val BASE_URL = "http://192.168.0.27:8000/" // Emülatör → localhost
     private const val TIMEOUT_SECONDS = 120L
 
     @Provides

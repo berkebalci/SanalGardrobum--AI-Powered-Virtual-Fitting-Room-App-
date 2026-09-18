@@ -56,12 +56,12 @@ private val bottomNavItems = listOf(
         unselectedIcon = Icons.Outlined.Checkroom,
         route = NavDestination.Wardrobe.route
     ),
-    BottomNavItem(
+    /*BottomNavItem(
         label = "Kombinler",
         selectedIcon = Icons.Filled.Palette,
         unselectedIcon = Icons.Outlined.Palette,
         route = NavDestination.Combinations.route
-    ),
+    )*/
     BottomNavItem(
         label = "Profil",
         selectedIcon = Icons.Filled.Person,

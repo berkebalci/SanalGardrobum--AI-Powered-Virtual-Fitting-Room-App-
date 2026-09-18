@@ -6,6 +6,7 @@ import android.util.Log
 import com.example.sanalgardrobum.data.remote.api.TryOnApiService
 import com.example.sanalgardrobum.data.util.Resource
 import com.example.sanalgardrobum.data.util.uriToFile
+import com.example.sanalgardrobum.domain.repository.TryOnRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

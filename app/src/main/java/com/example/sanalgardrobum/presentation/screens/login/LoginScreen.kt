@@ -3,23 +3,23 @@ package com.example.sanalgardrobum.presentation.screens.login
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Checkroom
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,12 +31,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.sanalgardrobum.R
 import com.example.sanalgardrobum.presentation.screens.utils.GradientBackground
 import com.example.sanalgardrobum.ui.theme.*
 
@@ -49,14 +51,17 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 32.dp),
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
+            Spacer(modifier = Modifier.height(56.dp))
+
             // ── Logo / İkon ─────────────────────────────────────────────
             Box(
                 modifier = Modifier
-                    .size(96.dp)
+                    .size(80.dp)
                     .clip(CircleShape)
                     .background(AppGradients.AccentSoft),
                 contentAlignment = Alignment.Center
@@ -65,15 +70,27 @@ fun LoginScreen(
                     imageVector = Icons.Outlined.Checkroom,
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(40.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // ── Hero Banner ─────────────────────────────────────────────
+            Image(
+                painter = painterResource(id = R.drawable.onboardherobannerv2),
+                contentDescription = "Onboard Hero Banner",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp)),
+                contentScale = ContentScale.FillWidth
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // ── Başlık ──────────────────────────────────────────────────
             Text(
-                text = "Sanal Gardrobum",
+                text = "Sanal Gardırobum",
                 style = MaterialTheme.typography.headlineLarge.copy(
                     brush = AppGradients.AccentHorizontal
                 ),
@@ -91,50 +108,7 @@ fun LoginScreen(
                 lineHeight = 24.sp
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
-
-            // ── Feature Pills ───────────────────────────────────────────
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-            ) {
-                listOf("Sanal Deneme", "Kombin Önerisi", "Gardırop").forEach { label ->
-                    Card(
-                        shape = RoundedCornerShape(50),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(1.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 3.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clip(CircleShape)
-                                    .background(AppGradients.AccentSoft),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    Icons.Outlined.AutoAwesome,
-                                    null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(10.dp)
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = label,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = Gray700
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             // ── Google Sign-In Button ───────────────────────────────────
             Card(
@@ -142,7 +116,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .height(56.dp)
                     .clickable(enabled = !uiState.isLoading) { onGoogleSignInClicked() },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(28.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                 elevation = CardDefaults.cardElevation(4.dp)
             ) {
@@ -151,7 +125,7 @@ fun LoginScreen(
                         .fillMaxSize()
                         .background(
                             brush = AppGradients.AccentHorizontal,
-                            shape = RoundedCornerShape(16.dp)
+                            shape = RoundedCornerShape(28.dp)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -178,7 +152,6 @@ fun LoginScreen(
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -196,7 +169,7 @@ fun LoginScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // ── Alt Bilgi ───────────────────────────────────────────────
             Text(
@@ -206,6 +179,8 @@ fun LoginScreen(
                 textAlign = TextAlign.Center,
                 lineHeight = 18.sp
             )
+
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

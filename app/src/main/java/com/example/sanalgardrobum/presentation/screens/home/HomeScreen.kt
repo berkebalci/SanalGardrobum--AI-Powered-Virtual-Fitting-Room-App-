@@ -69,7 +69,8 @@ fun HomeScreen(
             ) {
                 item {
                     Column(
-                        modifier = Modifier.padding(horizontal = 20.dp),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 100.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
@@ -141,11 +142,11 @@ private fun HeroBanner(onCtaClick: () -> Unit, modifier: Modifier = Modifier) {
             // Left card — tilted
             Card(
                 modifier = Modifier
-                    .width(140.dp)
-                    .height(200.dp)
+                    .width(190.dp)
+                    .height(250.dp)
                     .offset(x = (-80).dp, y = 16.dp)
                     .rotate(-8f),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(20.dp),
                 elevation = CardDefaults.cardElevation(6.dp)
             ) {
                 Image(
@@ -159,11 +160,11 @@ private fun HeroBanner(onCtaClick: () -> Unit, modifier: Modifier = Modifier) {
             // Right card — tilted
             Card(
                 modifier = Modifier
-                    .width(140.dp)
-                    .height(200.dp)
+                    .width(190.dp)
+                    .height(250.dp)
                     .offset(x = 80.dp, y = 16.dp)
                     .rotate(8f),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(20.dp),
                 elevation = CardDefaults.cardElevation(6.dp)
             ) {
                 Image(
@@ -177,10 +178,10 @@ private fun HeroBanner(onCtaClick: () -> Unit, modifier: Modifier = Modifier) {
             // Center card — largest, drawn last so it sits on top
             Card(
                 modifier = Modifier
-                    .width(170.dp)
-                    .height(250.dp)
+                    .width(220.dp)
+                    .height(300.dp)
                     .shadow(16.dp, RoundedCornerShape(20.dp)),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(24.dp),
                 elevation = CardDefaults.cardElevation(12.dp)
             ) {
                 Image(

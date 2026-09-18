@@ -1,4 +1,4 @@
-package com.example.sanalgardrobum.data.repository
+package com.example.sanalgardrobum.domain.repository
 
 import com.example.sanalgardrobum.data.util.Resource
 import kotlinx.coroutines.flow.Flow

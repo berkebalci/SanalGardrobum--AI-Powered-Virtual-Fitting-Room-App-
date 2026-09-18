@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sanalgardrobum.data.repository.TryOnRepository
+import com.example.sanalgardrobum.domain.repository.TryOnRepository
 import com.example.sanalgardrobum.data.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
